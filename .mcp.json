@@ -3,6 +3,14 @@
     "grain": {
       "type": "url",
       "url": "https://api.grain.com/_/mcp"
+    },
+    "telegram": {
+      "command": "bun",
+      "args": ["./.claude/channels/telegram.ts"],
+      "env": {
+        "TELEGRAM_BOT_TOKEN": "YOUR_BOT_TOKEN_HERE",
+        "TELEGRAM_ALLOWED_IDS": "YOUR_TELEGRAM_USER_ID"
+      }
     }
   }
 }
