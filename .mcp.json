@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "grain": {
+      "type": "url",
+      "url": "https://api.grain.com/_/mcp"
+    }
+  }
+}
