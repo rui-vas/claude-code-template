@@ -1,18 +1,44 @@
-# Project Instructions
+# Global Instructions
 
-These instructions are loaded into every Claude Code conversation.
-Write them like SOPs — clear, specific, and actionable.
+These instructions are loaded into every Claude Code conversation in this workspace.
+They apply across all projects. Project-specific instructions live in each project's
+own `CLAUDE.md`.
 
 ## Startup Routine
 
-1. Read all files in `context/` — this is your foundation
-2. Read `MEMORY.md` — this is what you've learned over time
-3. Use both to shape every task
+1. Read all files in `context/` — this is who the user is and their global preferences
+2. Read `MEMORY.md` — what you've learned about this person over time
+3. If working inside a specific project (`projects/<name>/`), also read that project's
+   `context/` and `MEMORY.md` for project-specific knowledge
+4. Use all of this to shape every task
+
+## How This Workspace Is Organized
+
+This is a **personal Claude Code workspace**. It has two layers:
+
+### Global Layer (root)
+Personal identity, preferences, and tools that apply everywhere.
+- `context/about.md` — Who you are, how you work
+- `context/stack.md` — Tools and conventions across all projects
+- `MEMORY.md` — What Claude remembers about you globally
+- `.claude/` — Global settings, commands, skills, channels
+- `.mcp.json` — Global MCP server connections
+
+### Project Layer (`projects/<name>/`)
+Each project is self-contained with its own Claude Code configuration.
+- `CLAUDE.md` — Project-specific instructions (loaded in addition to this file)
+- `context/about.md` — What the project is, who's involved
+- `context/stack.md` — Tech stack and architecture for this project
+- `MEMORY.md` — What Claude remembers about this specific project
+- `.claude/settings.json` — Project-specific permissions
+- `.claude/commands/` — Project-specific slash commands
+- `.claude/skills/` — Project-specific skills
+- `.claude/channels/` — Project-specific channel servers
 
 ## Code Standards
 
 - Write clean, readable code with descriptive variable names
-- Follow the conventions already established in this codebase
+- Follow the conventions already established in the codebase you're working in
 - Don't add comments unless the logic is genuinely non-obvious
 - Don't add features, refactor code, or make "improvements" beyond what was asked
 
@@ -30,18 +56,19 @@ Write them like SOPs — clear, specific, and actionable.
 
 ## Memory System
 
-When I correct you or you learn something new, update the relevant
-section in `MEMORY.md`:
+When corrected or when you learn something new, update the relevant `MEMORY.md`:
+- **Global things** (personal preferences, communication style) go in the root `MEMORY.md`
+- **Project-specific things** go in that project's `MEMORY.md`
 
+Memory sections:
 - **Voice** — tone, phrasing, writing corrections
-- **Process** — how I want tasks done
+- **Process** — how tasks should be done
 - **People** — who people are, relationships
 - **Projects** — active work, current tasks, status
 - **Output** — formats, naming, delivery preferences
 - **Tools** — which tools to use and how
 
-Keep MEMORY.md current. When something changes, update it in place
-— replace outdated info, don't just append below it.
+Keep MEMORY.md files current. Update in place — replace outdated info, don't append.
 
 ## Available Skills
 
@@ -55,32 +82,45 @@ Keep MEMORY.md current. When something changes, update it in place
 Channels let external systems push events into a Claude Code session.
 See `.claude/channels/README.md` for the full setup guide.
 
-- `webhook-one-way.ts` — Minimal webhook receiver (alerts, CI, monitoring)
-- `webhook-two-way.ts` — Full example with reply tool, sender gating, and permission relay
-
-Built-in channels (research preview): Telegram, Discord, iMessage, fakechat.
-
-## Project Structure
+## Full Structure
 
 ```
-project-root/
-├── .claude/                    # Claude Code configuration (committed to git)
-│   ├── settings.json           # Project-level permissions and settings
-│   ├── commands/               # Custom slash commands (/project:command-name)
+workspace-root/
+├── .claude/                          # Global Claude Code configuration
+│   ├── settings.json                 # Global permissions
+│   ├── commands/                     # Global slash commands
 │   │   ├── review.md
 │   │   ├── daily-standup.md
 │   │   └── explain.md
-│   ├── channels/               # Channel server examples and docs
-│   │   ├── README.md           # Setup guide for channels
-│   │   ├── webhook-one-way.ts  # Minimal one-way webhook receiver
-│   │   └── webhook-two-way.ts  # Two-way with reply, gating, permission relay
-│   └── skills/                 # Reusable skills (auto-invoked or /skill-name)
+│   ├── channels/                     # Global channel servers
+│   │   ├── README.md
+│   │   ├── webhook-one-way.ts
+│   │   └── webhook-two-way.ts
+│   └── skills/                       # Global skills (available everywhere)
 │       └── skill-creator/
 │           └── SKILL.md
-├── context/                    # Reference material loaded at startup
-│   ├── about.md                # What this project is, who it's for
-│   └── stack.md                # Tech stack, architecture decisions
-├── .mcp.json                   # MCP server connections
-├── CLAUDE.md                   # This file — project instructions
-└── MEMORY.md                   # Persistent memory across conversations
+├── context/                          # Global context (who you are)
+│   ├── about.md                      # Your identity, role, preferences
+│   └── stack.md                      # Tools used across all projects
+├── projects/                         # Your projects live here
+│   ├── project-one/                  # ← Each project is self-contained
+│   │   ├── .claude/
+│   │   │   ├── settings.json         # Project-specific permissions
+│   │   │   ├── commands/             # Project-specific commands
+│   │   │   ├── skills/               # Project-specific skills
+│   │   │   └── channels/             # Project-specific channels
+│   │   ├── context/
+│   │   │   ├── about.md              # What this project is
+│   │   │   └── stack.md              # This project's tech stack
+│   │   ├── CLAUDE.md                 # Project-specific instructions
+│   │   ├── MEMORY.md                 # Project-specific memory
+│   │   └── src/                      # Source code
+│   ├── project-two/                  # Same structure
+│   │   └── ...
+│   └── project-three/                # Same structure
+│       └── ...
+├── .mcp.json                         # Global MCP server connections
+├── CLAUDE.md                         # This file — global instructions
+├── MEMORY.md                         # Global memory (personal preferences)
+└── README.md                         # How to use this template
 ```

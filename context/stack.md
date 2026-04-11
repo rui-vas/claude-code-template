@@ -1,21 +1,24 @@
-# Tech Stack & Architecture
+# Global Tools & Preferences
 
-Replace this file with your actual project's tech stack.
-Claude reads this at the start of every conversation so it understands
-your codebase without needing to explore it first.
+This file describes tools, services, and conventions you use across
+all your projects. Project-specific stacks go in each project's
+own `context/stack.md`.
 
-## Example Format
+## Common Tools
 
-**Language:** TypeScript
-**Runtime:** Node.js 20
-**Framework:** Express
-**Database:** PostgreSQL with Prisma ORM
-**Testing:** Vitest
-**Deployment:** Docker on Railway
+- **Version control:** Git + GitHub (or GitLab, etc.)
+- **Package manager:** [e.g., npm, pnpm, yarn, pip, cargo]
+- **CI/CD:** [e.g., GitHub Actions, Vercel, Railway]
+- **Deployment:** [e.g., Vercel, AWS, Docker]
 
-## Architecture Decisions
+## Services You Use Across Projects
 
-- API follows REST conventions
-- Auth uses JWT tokens stored in httpOnly cookies
-- All database access goes through Prisma — no raw SQL
-- Environment variables loaded from .env (never committed)
+- [e.g., Supabase for auth and database]
+- [e.g., Stripe for payments]
+- [e.g., Resend for email]
+
+## Global Conventions
+
+- [e.g., Always use TypeScript strict mode]
+- [e.g., ESLint + Prettier on every project]
+- [e.g., Conventional commits]

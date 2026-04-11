@@ -1,19 +1,30 @@
-# About This Project
+# About You
 
-This is a Claude Code project template that demonstrates best practices for
-folder structure, configuration, and workflow setup.
+This is your personal Claude Code workspace. Fill this in so Claude
+understands who you are across all your projects.
 
-## Purpose
+## Who You Are
 
-Serve as a reference template that students can clone and adapt for their
-own projects. It shows where every configuration file goes and why.
+- **Name:** [Your name]
+- **Role:** [e.g., Full-stack developer, Product manager, Student]
+- **Experience level:** [e.g., Senior engineer, Learning to code, 3 years in web dev]
 
-## Audience
+## How You Work
 
-Students and developers learning to set up Claude Code projects effectively.
+- **Preferred language(s):** [e.g., TypeScript, Python, Go]
+- **Editor:** [e.g., VS Code, Cursor, Neovim]
+- **OS:** [e.g., macOS, Linux, Windows]
 
-## Key Principles
+## Communication Preferences
 
-- Convention over configuration — follow the standard folder structure
-- Everything committed to git — team members get the same Claude experience
-- Instructions are specific and actionable, not vague or aspirational
+- **Tone:** [e.g., Direct and concise, Explain things thoroughly, Casual]
+- **When stuck:** [e.g., Ask me before guessing, Try your best first, Show me options]
+- **Code style:** [e.g., Minimal comments, Strongly typed, Functional style]
+
+## What You're Working On
+
+List your active projects here so Claude has the big picture:
+
+1. **Project One** — [Brief description of what it is]
+2. **Project Two** — [Brief description of what it is]
+3. **Project Three** — [Brief description of what it is]
