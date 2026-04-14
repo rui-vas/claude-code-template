@@ -5,11 +5,14 @@
  * Bridges Telegram messages into Claude Code sessions via MCP channels,
  * and lets Claude reply back through the Telegram Bot API.
  *
+ * Supports text messages and voice messages (transcribed via OpenAI Whisper).
+ *
  * See .claude/channels/telegram/README.md for full setup instructions.
  *
  * Environment variables (loaded from .env at project root via Bun):
  *   TELEGRAM_BOT_TOKEN  — required, the token from @BotFather
  *   TELEGRAM_ALLOWED_IDS — comma-separated list of allowed user/chat IDs
+ *   OPENAI_API_KEY       — required for voice message transcription (Whisper)
  */
 import { Server } from '@modelcontextprotocol/sdk/server/index.js'
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js'
@@ -26,6 +29,8 @@ if (!BOT_TOKEN) {
   console.error('TELEGRAM_BOT_TOKEN is required')
   process.exit(1)
 }
+
+const OPENAI_API_KEY = process.env.OPENAI_API_KEY
 
 const API = `https://api.telegram.org/bot${BOT_TOKEN}`
 
@@ -62,6 +67,39 @@ async function sendMessage(chatId: string | number, text: string, parseMode?: st
     text,
     ...(parseMode ? { parse_mode: parseMode } : {}),
   })
+}
+
+async function getFileUrl(fileId: string): Promise<string> {
+  const result = (await tgRequest('getFile', { file_id: fileId })) as {
+    file_path: string
+  }
+  return `https://api.telegram.org/file/bot${BOT_TOKEN}/${result.file_path}`
+}
+
+async function transcribeVoice(fileId: string): Promise<string> {
+  if (!OPENAI_API_KEY) {
+    throw new Error('OPENAI_API_KEY is not set — cannot transcribe voice messages')
+  }
+  const url = await getFileUrl(fileId)
+  const audioRes = await fetch(url)
+  if (!audioRes.ok) throw new Error(`Failed to download voice file: ${audioRes.statusText}`)
+  const audioBlob = await audioRes.blob()
+
+  const form = new FormData()
+  form.append('file', audioBlob, 'voice.ogg')
+  form.append('model', 'whisper-1')
+
+  const whisperRes = await fetch('https://api.openai.com/v1/audio/transcriptions', {
+    method: 'POST',
+    headers: { Authorization: `Bearer ${OPENAI_API_KEY}` },
+    body: form,
+  })
+  if (!whisperRes.ok) {
+    const err = await whisperRes.text()
+    throw new Error(`Whisper API error: ${err}`)
+  }
+  const json = (await whisperRes.json()) as { text: string }
+  return json.text
 }
 
 // --- MCP Server --------------------------------------------------------------
@@ -175,6 +213,7 @@ async function poll() {
           from?: { id: number; first_name?: string; username?: string }
           chat: { id: number; type: string }
           text?: string
+          voice?: { file_id: string; duration: number }
           date: number
         }
       }>
@@ -182,7 +221,7 @@ async function poll() {
       for (const update of updates) {
         offset = update.update_id + 1
         const msg = update.message
-        if (!msg?.text) continue
+        if (!msg?.text && !msg?.voice) continue
 
         const senderId = msg.from?.id ?? 0
         const chatId = String(msg.chat.id)
