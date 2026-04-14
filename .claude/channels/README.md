@@ -145,68 +145,32 @@ a `notifications/claude/channel/permission` verdict back to Claude Code.
 
 Only enable this on channels with authenticated senders.
 
-## Telegram Channel Setup
+## Per-Channel Folder Convention
 
-The `telegram.ts` channel bridges Telegram messages into your Claude Code session
-(two-way: Claude can reply back).
+Each custom channel lives in its own subfolder under `.claude/channels/`, so
+everything it needs (server code, launch scripts, service configs, logs, docs)
+stays together:
 
-### Step-by-step
+```
+.claude/channels/
+├── README.md                    ← this file (general channel docs)
+├── webhook-one-way.ts           ← simple example
+├── webhook-two-way.ts           ← simple example
+└── telegram/                    ← each channel gets its own folder
+    ├── README.md                ← channel-specific setup guide
+    ├── server.ts                ← the MCP channel server
+    ├── start.sh                 ← launcher script
+    ├── com.claude.telegram-channel.plist   ← macOS LaunchAgent
+    └── logs/                    ← runtime logs (git-ignored)
+```
 
-1. **Create a Telegram bot**
-   - Open Telegram, search for `@BotFather`, send `/newbot`
-   - Follow the prompts — you'll get a bot token like `123456:ABC-DEF...`
+When building a new channel, create a `<channel-name>/` folder and put
+everything related to it inside.
 
-2. **Find your Telegram user ID**
-   - Start the channel without setting `TELEGRAM_ALLOWED_IDS`
-   - Send a message to your bot
-   - Check the Claude Code stderr output — it logs the rejected sender ID
-   - That number is your user ID
+## Available Channels
 
-3. **Configure the channel**
-   - Edit `.mcp.json` at the workspace root:
-   ```json
-   {
-     "mcpServers": {
-       "telegram": {
-         "command": "bun",
-         "args": ["./.claude/channels/telegram.ts"],
-         "env": {
-           "TELEGRAM_BOT_TOKEN": "123456:ABC-DEF...",
-           "TELEGRAM_ALLOWED_IDS": "your-user-id"
-         }
-       }
-     }
-   }
-   ```
-   - For multiple allowed users, comma-separate the IDs: `"123,456,789"`
-
-4. **Install dependencies**
-   ```bash
-   bun add @modelcontextprotocol/sdk zod
-   ```
-
-5. **Launch**
-   ```bash
-   claude --dangerously-load-development-channels server:telegram
-   ```
-
-6. **Test it** — send a message to your bot on Telegram. It should appear in
-   your Claude Code session, and Claude can reply back.
-
-### Features
-
-- **Two-way messaging**: Claude receives your Telegram messages and replies back
-- **Sender gating**: only allowed user IDs can interact (security against prompt injection)
-- **Permission relay**: Claude can ask for tool approval via Telegram
-- **Long message splitting**: responses over 4096 chars are auto-chunked
-- **Long polling**: no webhook or public URL needed — works behind NAT/firewalls
-
-### Environment Variables
-
-| Variable | Required | Description |
-|---|---|---|
-| `TELEGRAM_BOT_TOKEN` | Yes | Bot token from @BotFather |
-| `TELEGRAM_ALLOWED_IDS` | Yes | Comma-separated Telegram user IDs to allow |
+- **[Telegram](telegram/README.md)** — two-way Telegram bridge, supports
+  permission relay, can run 24/7 as a macOS service.
 
 ## Further Reading
 

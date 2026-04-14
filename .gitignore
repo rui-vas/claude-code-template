@@ -11,3 +11,9 @@ node_modules/
 
 # Bun
 bun.lockb
+
+# Logs
+logs/
+
+# Claude auto-memory folder (we use MEMORY.md instead)
+.claude/projects/

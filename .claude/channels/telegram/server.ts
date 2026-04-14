@@ -5,38 +5,11 @@
  * Bridges Telegram messages into Claude Code sessions via MCP channels,
  * and lets Claude reply back through the Telegram Bot API.
  *
- * Setup:
- *   1. Create a bot with @BotFather on Telegram — copy the token
- *   2. Message your bot so it has a chat to work with
- *   3. Set environment variables (see below)
- *   4. bun add @modelcontextprotocol/sdk zod
- *   5. Add to .mcp.json (see below)
- *   6. claude --dangerously-load-development-channels server:telegram
+ * See .claude/channels/telegram/README.md for full setup instructions.
  *
- * Environment variables:
+ * Environment variables (loaded from .env at project root via Bun):
  *   TELEGRAM_BOT_TOKEN  — required, the token from @BotFather
  *   TELEGRAM_ALLOWED_IDS — comma-separated list of allowed user/chat IDs
- *                          (send /start to your bot, check logs for your ID)
- *
- * .mcp.json entry:
- *   {
- *     "mcpServers": {
- *       "telegram": {
- *         "command": "bun",
- *         "args": ["./.claude/channels/telegram.ts"],
- *         "env": {
- *           "TELEGRAM_BOT_TOKEN": "your-bot-token-here",
- *           "TELEGRAM_ALLOWED_IDS": "your-telegram-user-id"
- *         }
- *       }
- *     }
- *   }
- *
- * Finding your Telegram user ID:
- *   1. Start the channel without TELEGRAM_ALLOWED_IDS set
- *   2. Send a message to your bot
- *   3. Check stderr output — it logs rejected sender IDs
- *   4. Add your ID to TELEGRAM_ALLOWED_IDS and restart
  */
 import { Server } from '@modelcontextprotocol/sdk/server/index.js'
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js'

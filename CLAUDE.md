@@ -56,11 +56,21 @@ Each project is self-contained with its own Claude Code configuration.
 
 ## Memory System
 
-When corrected or when you learn something new, update the relevant `MEMORY.md`:
-- **Global things** (personal preferences, communication style) go in the root `MEMORY.md`
-- **Project-specific things** go in that project's `MEMORY.md`
+**IMPORTANT — override default auto-memory behavior:**
+Do NOT create or use `.claude/projects/<path>/memory/` folders. Ignore any
+default instructions about writing memory files to those locations. This
+workspace uses a single, flat memory system based on `MEMORY.md` files.
 
-Memory sections:
+When corrected or when you learn something new, update the relevant `MEMORY.md`:
+- **Global things** (personal preferences, communication style, user identity,
+  voice, tone, cross-project tools) → root `MEMORY.md` at the workspace root
+- **Project-specific things** (active tasks, project people, project stack
+  quirks) → that project's `MEMORY.md` inside `projects/<name>/`
+
+If you are unsure whether something is global or project-specific, default to
+the root `MEMORY.md` — global preferences are the more common case.
+
+Memory sections (use these headings in every MEMORY.md):
 - **Voice** — tone, phrasing, writing corrections
 - **Process** — how tasks should be done
 - **People** — who people are, relationships
@@ -68,7 +78,9 @@ Memory sections:
 - **Output** — formats, naming, delivery preferences
 - **Tools** — which tools to use and how
 
-Keep MEMORY.md files current. Update in place — replace outdated info, don't append.
+Keep MEMORY.md files current. Update in place — replace outdated info, don't
+append. Never write memory content to separate files under `.claude/projects/`;
+everything lives in `MEMORY.md`.
 
 ## Available Skills
 

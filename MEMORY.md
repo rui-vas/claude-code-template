@@ -12,6 +12,7 @@
 
 ## Output
 
+- Favorite color: blue
 
 ## Tools
 

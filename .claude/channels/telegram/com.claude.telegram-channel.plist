@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<!--
+  macOS LaunchAgent for running Claude Code + Telegram channel 24/7.
+
+  BEFORE INSTALLING: edit the path in the ProgramArguments string below
+  to point to your local clone of this repo.
+
+  Install:
+    cp .claude/channels/telegram/com.claude.telegram-channel.plist \
+       ~/Library/LaunchAgents/
+    launchctl load ~/Library/LaunchAgents/com.claude.telegram-channel.plist
+
+  Uninstall:
+    launchctl unload ~/Library/LaunchAgents/com.claude.telegram-channel.plist
+    rm ~/Library/LaunchAgents/com.claude.telegram-channel.plist
+
+  Check status:
+    launchctl list | grep claude.telegram
+
+  View logs:
+    tail -f .claude/channels/telegram/logs/telegram-*.log
+-->
+<dict>
+  <key>Label</key>
+  <string>com.claude.telegram-channel</string>
+
+  <key>ProgramArguments</key>
+  <array>
+    <string>/bin/bash</string>
+    <string>-c</string>
+    <string>cd "$HOME/Desktop/RUI VAS/CLAUDE FOLDER TEMPLATE" &amp;&amp; ./.claude/channels/telegram/start.sh</string>
+  </array>
+
+  <key>RunAtLoad</key>
+  <true/>
+
+  <key>KeepAlive</key>
+  <true/>
+
+  <key>StandardOutPath</key>
+  <string>/tmp/claude-telegram.out.log</string>
+
+  <key>StandardErrorPath</key>
+  <string>/tmp/claude-telegram.err.log</string>
+
+  <key>EnvironmentVariables</key>
+  <dict>
+    <key>PATH</key>
+    <string>/usr/local/bin:/usr/bin:/bin:/opt/homebrew/bin</string>
+    <key>HOME</key>
+    <string>/Users/ruivas</string>
+  </dict>
+
+  <!-- Restart after 10 seconds if it crashes -->
+  <key>ThrottleInterval</key>
+  <integer>10</integer>
+</dict>
+</plist>
