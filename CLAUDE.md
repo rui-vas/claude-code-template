@@ -88,6 +88,7 @@ everything lives in `MEMORY.md`.
 - `/project:review` — Review code changes on the current branch
 - `/project:daily-standup` — Generate a standup summary from git activity
 - `/project:explain` — Explain selected code in plain language
+- `remotion` — Remotion best practices for video creation in React (animations, compositions, captions, audio, transitions, fonts, and more)
 
 ## Channels
 
